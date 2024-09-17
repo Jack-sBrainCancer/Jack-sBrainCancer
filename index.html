@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Avaliação</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc; /* Fundo suave */
+            color: #333;
+        }
+
+        header {
+            background-color: #ff6f61; /* Rosa */
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .profile-form, .upload-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #ff6f61; /* Rosa */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"], textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus, textarea:focus, input[type="file"]:focus {
+            border: 1px solid #ff6f61; /* Rosa */
+            outline: none;
+        }
+
+        button {
+            background-color: #ff6f61; /* Rosa */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #e65c50; /* Rosa mais escuro */
+        }
+
+        .profiles {
+            margin-top: 20px;
+        }
+
+        .profile {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #f9f9f9; /* Fundo claro */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile h3 {
+            margin: 0;
+            color: #4a4a4a; /* Texto escuro */
+        }
+
+        .uploaded-image {
+            max-width: 150px; /* Limitar a largura da imagem */
+            height: auto;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .image-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px; /* Espaço entre as imagens */
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-left: 10px; /* Espaço entre a imagem e as estrelas */
+        }
+
+        .star {
+            color: #ccc;
+            margin: 0 2px;
+            cursor: pointer;
+        }
+
+        .star:hover,
+        .star:hover ~ .star {
+            color: #ff6f61; /* Rosa */
+        }
+
+        .star-container {
+            display: flex;
+            align-items: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #fff;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating-display {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <audio id="notificationSound1" src="https://rateme.social/audio/star1.mp3" preload="auto"></audio>
+    <audio id="notificationSound2" src="https://rateme.social/audio/star2.mp3" preload="auto"></audio>
+    <audio id="notificationSound3" src="https://rateme.social/audio/star3.mp3" preload="auto"></audio>
+    <audio id="notificationSound4" src="https://rateme.social/audio/star4.mp3" preload="auto"></audio>
+    <audio id="notificationSound5" src="https://rateme.social/audio/star5.mp3" preload="auto"></audio>
+    <audio id="uploadNotificationSound" src="https://rateme.social/audio/send.mp3" preload="auto"></audio> <!-- Som de notificação para upload -->
+
+    <header>
+        <h1>Nosedive App</h1>
+    </header>
+    
+    <main>
+        <section class="profile-form">
+            <h2>Criar Perfil</h2>
+            <form id="createProfile">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" required>
+
+                <label for="bio">Biografia:</label>
+                <textarea id="bio" rows="4" required></textarea>
+
+                <button type="submit">Criar Perfil</button>
+            </form>
+        </section>
+
+        <section class="upload-section">
+            <h2>Fazer Upload de Imagem</h2>
+            <form id="uploadForm">
+                <label for="imageUpload">Escolha uma imagem:</label>
+                <input type="file" id="imageUpload" accept="image/*" required>
+                <button type="submit">Fazer Upload</button>
+            </form>
+        </section>
+
+        <div class="profiles" id="profilesList">
+            <h2>Perfis Criados</h2>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Sistema de Avaliação. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const profiles = [];
+
+        document.getElementById('createProfile').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const bio = document.getElementById('bio').value;
+
+            const profile = { name, bio, images: [] };
+            profiles.push(profile);
+            document.getElementById('createProfile').reset();
+            displayProfiles();
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const imageInput = document.getElementById('imageUpload');
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const image = {
+                    src: e.target.result,
+                    ratings: 0 // Inicialmente sem avaliação
+                };
+                profiles[profiles.length - 1].images.push(image); // Adiciona a imagem ao último perfil criado
+                displayProfiles();
+
+                // Tocar som de notificação de upload
+                document.getElementById('uploadNotificationSound').play();
+            }
+            reader.readAsDataURL(file);
+            imageInput.value = ''; // Limpar o input
+        });
+
+        function displayProfiles() {
+            const profilesList = document.getElementById('profilesList');
+            profilesList.innerHTML = '';
+
+            profiles.forEach((profile) => {
+                const profileDiv = document.createElement('div');
+                profileDiv.classList.add('profile');
+
+                const profileInfo = document.createElement('div');
+                profileInfo.innerHTML = `<h3>${profile.name} (Avaliação Total: ${calculateTotalRating(profile).toFixed(2)})</h3><p>${profile.bio}</p>`;
+                
+                profileDiv.appendChild(profileInfo);
+
+                profile.images.forEach((image, imgIndex) => {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.classList.add('image-container');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image.src;
+                    imgElement.classList.add('uploaded-image');
+
+                    const ratingDiv = document.createElement('div');
+                    const starContainer = createStarRating(imgIndex, profile, image); // Passa a imagem para a função
+
+                    const ratingDisplay = document.createElement('span');
+                    ratingDisplay.classList.add('rating-display');
+                    ratingDisplay.innerText = (image.ratings).toFixed(2); // Exibe a avaliação em formato 0.00
+
+                    ratingDiv.appendChild(starContainer);
+                    ratingDiv.appendChild(ratingDisplay);
+                    imgContainer.appendChild(imgElement);
+                    imgContainer.appendChild(ratingDiv);
+                    profileDiv.appendChild(imgContainer);
+                });
+
+                profilesList.appendChild(profileDiv);
+            });
+        }
+
+        function calculateTotalRating(profile) {
+            return profile.images.reduce((acc, image) => acc + image.ratings, 0);
+        }
+
+        function createStarRating(imgIndex, profile, image) {
+            const starContainer = document.createElement('div');
+            starContainer.classList.add('star-container');
+
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('span');
+                star.classList.add('star');
+                star.dataset.value = (i * 0.01).toFixed(2); // Cada estrela representa 0.01
+                star.innerHTML = '&#9733;'; // Estrela preenchida
+                
+                if (image.ratings > 0) {
+                    star.style.color = '#ff6f61'; // Marca as estrelas de acordo com a avaliação
+                    if (image.ratings < i * 0.01) {
+                        star.style.color = '#ccc'; // Desmarca as estrelas superiores
+                    }
+                } else {
+                    star.addEventListener('click', function() {
+                        image.ratings = parseFloat(this.dataset.value); // Salva a avaliação na imagem
+                        alert(`Avaliação dada a imagem: ${image.ratings.toFixed(2)} estrelas`);
+                        
+                        // Tocar som de notificação baseado na avaliação
+                        if (image.ratings <= 0.01) {
+                            document.getElementById('notificationSound1').play();
+                        } else if (image.ratings <= 0.02) {
+                            document.getElementById('notificationSound2').play();
+                        } else if (image.ratings <= 0.03) {
+                            document.getElementById('notificationSound3').play();
+                        } else if (image.ratings <= 0.04) {
+                            document.getElementById('notificationSound4').play();
+                        } else {
+                            document.getElementById('notificationSound5').play();
+                        }
+                        
+                        displayProfiles(); // Atualiza a visualização
+                    });
+                }
+
+                star.addEventListener('contextmenu', function(event) {
+                    event.preventDefault(); // Previne o menu de contexto padrão
+
+                    if (image.ratings > 0) {
+                        if (i === 1) {
+                            image.ratings = Math.max(0.01, image.ratings - 0.03); // 1 estrela remove 0.03
+                        } else if (i === 2) {
+                            image.ratings = Math.max(0.02, image.ratings - 0.02); // 2 estrelas removem 0.02
+                        } else if (i === 3) {
+                            image.ratings = Math.max(0.03, image.ratings - 0.01); // 3 estrelas removem 0.01
+                        }
+                        alert(`Avaliação removida. Nova Avaliação: ${image.ratings.toFixed(2)} estrelas`);
+                        displayProfiles(); // Atualiza a visualização
+                    }
+                });
+
+                starContainer.appendChild(star);
+            }
+
+            return starContainer;
+        }
+    </script>
+</body>
+</html>
