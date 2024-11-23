@@ -1,0 +1,222 @@
+body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0f0f0f;
+      /* Fundo preto profundo */
+      color: #ffffff;
+      /* Texto branco */
+      margin: 0;
+      padding: 20px;
+      overflow: auto;
+      /* Para evitar barras de rolagem indesejadas */
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+      /* Gradiente escuro */
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 255, 255, 0.2), 0 5px 15px rgba(255, 0, 255, 0.2);
+      backdrop-filter: blur(10px);
+      /* Efeito de desfoque do fundo */
+    }
+
+    h1 {
+      text-align: center;
+      color: #B70000;
+      font-family: 'Nosifer', Times, serif;
+      /* Verde neon */
+      text-shadow: 0 0 10px #B70000;
+      /* Sombra neon */
+    }
+
+    .content {
+      white-space: pre-wrap;
+      /* Mantém quebras de linha do texto */
+      line-height: 1.6;
+      color: #ffffff;
+      /* Texto branco */
+    }
+
+    .content p {
+      font-size: 15px;
+      font-family: 'Orbitron', Times, serif;
+      text-indent: 2em;
+      /* Indenta o início do parágrafo */
+      margin-bottom: 1.5em;
+      /* Espaço entre parágrafos */
+    }
+
+    .content p::first-letter {
+      font-size: 3em;
+      /* Tamanho maior para a primeira letra */
+      font-weight: bold;
+      /* Letra em negrito */
+      float: left;
+      /* Faz a letra flutuar à esquerda */
+      letter-spacing: 1px;
+      line-height: 1;
+      /* Alinha a letra com o texto */
+      margin-right: 0.00em;
+      /* Espaçamento à direita da letra */
+      color: #00ffcc;
+      /* Cor da primeira letra, se desejar */
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 95%;
+      padding: 10px;
+      font-family: "Zen Tokyo Zoo", sans-serif;
+      border: 1px solid #00ffcc;
+      /* Borda verde neon */
+      border-radius: 10px;
+      background-color: #1a1a1a;
+      /* Cor de fundo do campo de pesquisa */
+      color: #FCFF00;
+      text-shadow: 0 0 10px #FCFF00;
+      font-size: 17px;
+      /* Texto do campo de pesquisa */
+      transition: border-color 0.3s;
+    }
+
+    .search-bar input::placeholder {
+      color: #aaaaaa;
+      /* Cor do texto do placeholder */
+    }
+
+    .search-bar input:focus {
+      border-color: #ff00ff;
+      /* Mudança de cor ao focar */
+    }
+
+    span.highlight {
+      background-color: rgba(0, 255, 204, 0.5);
+      /* Destaque semi-transparente */
+      color: black;
+      /* Texto preto no destaque */
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #00ffcc;
+      /* Verde neon */
+    }
+
+    .btn {
+      font-size: 1.2rem;
+      padding: 1rem 2.5rem;
+      border: none;
+      outline: none;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      background-color: rgb(14, 14, 26);
+      font-family: 'Nosifer', Times, serif;
+      color: rgb(234, 234, 234);
+      font-weight: 700;
+      transition: 0.6s;
+      box-shadow: 0px 0px 60px #1f4c65;
+      -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4));
+    }
+
+    .btn:active {
+      scale: 0.92;
+    }
+
+    button:hover {
+      background: rgb(2, 29, 78);
+      background: linear-gradient(270deg, rgba(2, 29, 78, 0.681) 0%, rgba(31, 215, 232, 0.873) 60%);
+      color: rgb(4, 4, 38);
+    }
+
+    details {
+      display: flex;
+      text-align: center;
+      color: #876F00;
+      font-family: 'Nosifer', Times, serif;
+      font-weight: bolder;
+      background-color: #000000;
+      margin: 40px;
+      text-shadow: 0 0 10px #FE0000;
+      border-radius: 20px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    details:hover {
+      color: #E1FF00;
+    }
+
+    ::selection {
+      background-color: #FF006D;
+      color: #0DFF00;
+    }
+
+    a {
+      color: #FE0000;
+      text-shadow: 0 0 10px #FE0000;
+    }
+
+    a:hover {
+      color: #009DFE;
+      text-shadow: 0 0 10px #009DFE;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      outline: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+      #000000
+    }
+
+    .chatIframe {
+      display: none;
+      /* Os iframes começam ocultos */
+      width: 300px;
+      /* Largura do iframe */
+      height: 500px;
+      /* Altura do iframe */
+      border: 1px solid #ccc;
+      /* Borda do iframe */
+      margin-top: 10px;
+      /* Espaçamento entre os iframes */
+    }
+    .btn-lang {
+      font-size: 12px;
+      border: none;
+      outline: none;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      background-color: rgb(14, 14, 26);
+      color: rgb(234, 234, 234);
+      font-weight: 700;
+      transition: 0.6s;
+    }
+        .language-button, .option-button {
+      margin: 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #00ffcc;
+      color: black;
+      cursor: pointer;
+    }
+        .options {
+      display: none; /* Oculta as opções inicialmente */
+      margin-top: 10px;
+    }
+
+    .option-button {
+      background-color: #0099cc;
+    }
